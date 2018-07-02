@@ -14,3 +14,10 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'tickets'], function ($router)
+{
+    $router->post('/priority', 'TicketsController@priority');
+});
+
+
