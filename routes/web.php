@@ -20,4 +20,10 @@ $router->group(['prefix' => 'tickets'], function ($router)
     $router->post('/priority', 'TicketsController@priority');
 });
 
+$router->group(['prefix' => 'orderby'], function ($router)
+{
+    $router->put('/date/{type}', 'ActionsController@date');
+    $router->put('/priority', 'ActionsController@priority');
+});
+
 

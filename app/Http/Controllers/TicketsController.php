@@ -38,10 +38,10 @@ class TicketsController extends Controller
       $dateCreate = explode(" ", $create);
       $dateUpdate = explode(" ", $update);
 
-      $date1 = new \DateTime( $dateCreate[0] );
-      $date2 = new \DateTime( $dateUpdate[0] );
+      $create = new \DateTime( $dateCreate[0] );
+      $update = new \DateTime( $dateUpdate[0] );
 
-      $interval = $date1->diff( $date2 );
+      $interval = $create->diff( $update );
       $interval = ( $interval->m * 30 ) + ( $interval->d );
       return ( $interval > 45 ? 1 : 0 ) ;
     }
@@ -49,8 +49,8 @@ class TicketsController extends Controller
     function verifyWords( $message ) {
       $badWords = array('Mas', 'quanto');
       $countWords = 0;
-      foreach ($badWords as $item) {
-        $countWords = $countWords + substr_count($message, $item);
+      foreach ($badWords as $words) {
+        $countWords = $countWords + substr_count($message, $words);
       }
       return $countWords;
     }
