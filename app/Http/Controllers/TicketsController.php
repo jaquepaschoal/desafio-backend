@@ -27,10 +27,11 @@ class TicketsController extends Controller
         foreach ($value['Interactions'] as $msg) {
           $punctuation = $punctuation + $this->verifyWords( $msg['Message'] ) + $this->verifySubject( $msg['Subject'] );
         }
-        array_push($data,['ID' => $ticketID, 'Punctuation' => $punctuation, 'Priority' => $this->isPriorityHigh( $punctuation )]);
+        $value = array( 'Priority' => $this->isPriorityHigh( $punctuation ), 'Punctuation' => $punctuation ) + $value;
+        array_push($data,$value);
       }
 
-      return var_dump($data);
+      return $data;
     }
 
     function verifyTimeResolution( $create, $update ){
@@ -55,15 +56,14 @@ class TicketsController extends Controller
     }
 
     function verifySubject( $subject ) {
-      return $subject === 'Reclamação' ? 1 : 0;
+      return $subject === 'Reclamação' ? 4 : 0;
     }
 
     function isPriorityHigh( $count ) {
-      if ( $count >= 3 )
+      if ( $count >= 4 )
         return 'Prioridade Alta';
       return 'Prioridade Baixa';
     }
-
 }
 
 
