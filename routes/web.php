@@ -28,8 +28,14 @@ $router->group(['prefix' => 'orderby'], function ($router)
 
 $router->group(['prefix' => 'filter'], function ($router)
 {
-    $router->put('/date/{type}', 'ActionsController@filterbyDate');
+    $router->put('/date/{initial}/{final}', 'ActionsController@filterbyDate');
     $router->put('/priority/{type}', 'ActionsController@filterbyPriority');
 });
+
+$router->group(['prefix' => 'pagination'], function ($router)
+{
+    $router->put('/{items}/{number}', 'ActionsController@pagination');
+});
+
 
 
