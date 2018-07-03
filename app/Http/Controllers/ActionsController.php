@@ -18,7 +18,7 @@ class ActionsController extends Controller
     }
 
     // order by
-    function date(Request $request, $type = null) {
+    function orderbyDate(Request $request, $type = null) {
       $read =  json_decode($request->getContent(), true);
       foreach ($read as $item) {
         $date = explode(" ", $item[$type]);
@@ -28,13 +28,32 @@ class ActionsController extends Controller
       return $read;
     }
 
-    function priority(Request $request) {
+    function orderbyPriority(Request $request) {
       $read =  json_decode($request->getContent(), true);
       foreach ($read as $item) {
         $priorities[] = $item['Priority'];
       }
       array_multisort($priorities, $read);
-      return var_dump($read);
+      return $read;
+    }
+
+    //filter 
+    function filterbyPriority(Request $request, $type = null) {
+      $read =  json_decode($request->getContent(), true);
+      $priority = $type === 'pa' ? 'Prioridade Alta' : 'Prioridade Baixa';
+
+      if( $priority === 'Prioridade Alta') {
+        $filter = array_filter($read, function($item){
+          return $item['Priority'] === 'Prioridade Alta';
+        });
+      } else {
+        $filter = array_filter($read, function($item){
+          return $item['Priority'] === 'Prioridade Baixa';
+        });
+      }
+
+
+      return $filter;
     }
 
    

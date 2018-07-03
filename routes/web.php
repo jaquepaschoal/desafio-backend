@@ -22,8 +22,14 @@ $router->group(['prefix' => 'tickets'], function ($router)
 
 $router->group(['prefix' => 'orderby'], function ($router)
 {
-    $router->put('/date/{type}', 'ActionsController@date');
-    $router->put('/priority', 'ActionsController@priority');
+    $router->put('/date/{type}', 'ActionsController@orderbyDate');
+    $router->put('/priority', 'ActionsController@orderbyPriority');
+});
+
+$router->group(['prefix' => 'filter'], function ($router)
+{
+    $router->put('/date/{type}', 'ActionsController@filterbyDate');
+    $router->put('/priority/{type}', 'ActionsController@filterbyPriority');
 });
 
 
