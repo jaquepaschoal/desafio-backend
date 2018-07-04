@@ -18,7 +18,8 @@ class TicketsController extends Controller
     }
 
     function priority(Request $request) {
-      $read =  json_decode($request->getContent(), true);
+      $read = json_decode(Storage::get('tickets.json'), true);
+      // $read =  json_decode($request->getContent(), true);
       $data = array();
 
       foreach ($read as $value) {
@@ -47,7 +48,19 @@ class TicketsController extends Controller
     }
 
     function verifyWords( $message ) {
-      $badWords = array('Mas', 'quanto');
+      $badWords = array('Não',
+                         'não', 
+                         'nao foi entregue', 
+                         'não foi entregue', 
+                         'providências', 
+                         'providencias', 
+                         'não consigo',
+                         'nao consigo',
+                         'cancelamento',
+                         'não chegou',
+                         'nao chegou',
+                         'não funciona',
+                         'nao funciona');
       $countWords = 0;
       foreach ($badWords as $words) {
         $countWords = $countWords + substr_count($message, $words);

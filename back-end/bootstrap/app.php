@@ -25,7 +25,7 @@ $app = new Laravel\Lumen\Application(
 
 
 
-// $app->withFacades();
+$app->withFacades();
 
 // $app->withEloquent();
 
@@ -49,6 +49,10 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
+
+$app->singleton('filesystem', function ($app) {
+    return $app->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem');
+});
 
 /*
 |--------------------------------------------------------------------------

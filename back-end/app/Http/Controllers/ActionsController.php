@@ -37,15 +37,15 @@ class ActionsController extends Controller
     $read =  json_decode( $request->getContent(), true );
 
     // Prioridade alta
-    if( $type === 'pa' ) {
+    if( $type == 'pa' ) {
       $filter = array_filter( $read, function( $item ) {
         return $item['Priority'] === 'Prioridade Alta';
       });
+    } else {
+      $filter = array_filter( $read, function( $item ) {
+        return $item['Priority'] === 'Prioridade Baixa';
+      });
     }
-
-    $filter = array_filter( $read, function( $item ) {
-      return $item['Priority'] === 'Prioridade Baixa';
-    });
 
     return $filter;
   }
@@ -68,11 +68,12 @@ class ActionsController extends Controller
     $total = count( $read ); // # Total items in array    
     $limit = $items; // # Per page    
     $totalPages = ceil( $total/ $limit ); // # Calculate total pages
-    $page = max($page, 1); // # Get 1 page when $_GET['page'] <= 0
-    $page = min($page, $totalPages); // # Get last page when $_GET['page'] > $totalPages
+    $page = max($page, 1); // # Get 1 page when page <= 0
+    $page = min($page, $totalPages); // # Get last page when page > $totalPages
     $offset = ($page - 1) * $limit;
     if( $offset < 0 ) $offset = 0;
     $read = array_slice( $read, $offset, $limit );
+    $read = array('Page number' => $page, 'Total pages' => $totalPages, 'Total items' => $total) + $read;
     return $read;
   }
 }
