@@ -23,6 +23,8 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+
+
 // $app->withFacades();
 
 // $app->withEloquent();
@@ -67,6 +69,11 @@ $app->singleton(
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+ ]);
+
+ 
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
