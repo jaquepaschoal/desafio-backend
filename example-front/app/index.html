@@ -9,26 +9,38 @@
 </head>
 <body>
   <h2>Desafio Back-End - Requisições</h2>
-  <div>
-    <button data-js="priority">Definir Prioridades</button>
-    <button data-js="order-by-create">Ordenar (Data de criação)</button>
-    <button data-js="order-by-update">Ordenar (Data de atualização)</button>
-    <button data-js="order-by-priority">Ordenar (Prioridade)</button>
-    <button data-js="filter-date">Filtrar (Data)</button>
-    <button data-js="filter-priority">Filtrar (Prioridade)</button>
-    <button data-js="pagination">Paginar</button>
+  <div class="buttons">
+    <button class='actions' data-js="priority">Definir Prioridades</button>
+    <button class='actions' data-js="order-by-create">Ordenar (Data de criação)</button>
+    <button class='actions' data-js="order-by-update">Ordenar (Data de atualização)</button>
+    <button class='actions' data-js="order-by-priority">Ordenar (Prioridade)</button>
+    <button class='actions' data-js="filter-date">Filtrar (Data)</button>
+    <button class='actions' data-js="filter-priority">Filtrar (Prioridade)</button>
   </div>
-  <div class="result" data-js="result">
+  <div class="table-content" >
+    <table>
+      <th>Ticket ID</th>
+      <th>Prioridade</th>
+      <th>Pontuação</th>
+      <th>Data de Criação</th>
+      <th>Data de Atualização</th>
+      <tbody data-js="result">
+      </tbody>
+    </table>
+  </div>
+  <div data-js="pagination-buttons" class="pagination" >
+    <h3>Páginas:</h3>
+    <div data-js="numbers" ></div>
+  </div>
 
-  </div>
 <script  src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script  type="text/javascript" src="assets/js/table.js"></script>
 <script  type="text/javascript" src="assets/js/getPriority.js"></script>
 <script  type="text/javascript" src="assets/js/orderByDateCreate.js"></script>
 <script  type="text/javascript" src="assets/js/orderByDateUpdate.js"></script>
 <script  type="text/javascript" src="assets/js/orderByPriority.js"></script>
 <script  type="text/javascript" src="assets/js/filterDate.js"></script>
 <script  type="text/javascript" src="assets/js/filterPriority.js"></script>
-
 
 </body>
 </html>

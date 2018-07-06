@@ -17,25 +17,25 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'tickets'], function ($router)
 {
-    $router->post('/priority', 'TicketsController@priority');
+    $router->post('/priority/{number}', 'TicketsController@priority');
+
+    $router->group(['prefix' => 'orderby'], function ($router)
+    {
+        $router->put('/date/{type}/{number}', 'TicketsController@orderbyDate');
+        $router->put('/priority/{number}', 'TicketsController@orderbyPriority');
+    });
+
+    $router->group(['prefix' => 'filter'], function ($router)
+    {
+        $router->put('/date/{initial}/{final}/{number}', 'TicketsController@filterbyDate');
+        $router->put('/priority/{type}/{number}', 'TicketsController@filterbyPriority');    
+    });
 });
 
-$router->group(['prefix' => 'orderby'], function ($router)
-{
-    $router->put('/date/{type}', 'ActionsController@orderbyDate');
-    $router->put('/priority', 'ActionsController@orderbyPriority');
-});
 
-$router->group(['prefix' => 'filter'], function ($router)
-{
-    $router->put('/date/{initial}/{final}', 'ActionsController@filterbyDate');
-    $router->put('/priority/{type}', 'ActionsController@filterbyPriority');
-});
 
-$router->group(['prefix' => 'pagination'], function ($router)
-{
-    $router->put('/{items}/{number}', 'ActionsController@pagination');
-});
+
+
 
 
 

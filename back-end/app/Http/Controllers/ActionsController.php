@@ -33,22 +33,8 @@ class ActionsController extends Controller
   }
 
   // # Filter by priority 
-  function filterbyPriority( Request $request, $type = null ) {
-    $read =  json_decode( $request->getContent(), true );
 
-    // Prioridade alta
-    if( $type == 'pa' ) {
-      $filter = array_filter( $read, function( $item ) {
-        return $item['Priority'] === 'Prioridade Alta';
-      });
-    } else {
-      $filter = array_filter( $read, function( $item ) {
-        return $item['Priority'] === 'Prioridade Baixa';
-      });
-    }
 
-    return $filter;
-  }
 
   function filterbyDate( Request $request, $initial = null, $final = null ) {
     $read =  json_decode( $request->getContent(), true );
@@ -62,8 +48,7 @@ class ActionsController extends Controller
   }
 
   // # Pagination
-  function pagination( Request $request, $items = null, $number = null) {
-    $read =  json_decode( $request->getContent(), true );
+  function pagination( $read = null, $items = null, $number = null) {
     $page = $number;
     $total = count( $read ); // # Total items in array    
     $limit = $items; // # Per page    
@@ -73,7 +58,7 @@ class ActionsController extends Controller
     $offset = ($page - 1) * $limit;
     if( $offset < 0 ) $offset = 0;
     $read = array_slice( $read, $offset, $limit );
-    $read = array('Page number' => $page, 'Total pages' => $totalPages, 'Total items' => $total) + $read;
+    $read = array('Number' => $page, 'Pages' => $totalPages, 'Items' => $total) + $read;
     return $read;
   }
 }

@@ -6,44 +6,41 @@
  * @version 1.1.1
  * Copyright 2018. MIT licensed.
  */
-(function(window){
+(function(table){
   'use strict'
 
   var $orderByPriority = document.querySelector('[data-js="order-by-priority');
-  $orderByPriority.addEventListener('click', getPriorities);
+  $orderByPriority.addEventListener('click', orderByPriority);
 
-  function getPriorities() {
-    axios({
-      method: 'post',
-      url:'http://localhost:8000/tickets/priority',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(function (response) {
-     orderByPriority(response.data);
-    })
-    .catch(function (error) {
-      console.log(error.response);
-    });
-  }
-
-  function orderByPriority(response) { 
+  function orderByPriority( page ) { 
     axios({
       method: 'put',
-      url:'http://localhost:8000/orderby/priority',
+      url:'http://localhost:8000/tickets/orderby/priority/' + page,
       headers: { 
         'Content-Type': 'application/json',
       },
-      data: response
     })
     .then(function (response) {
-      console.log(response.data);
+      var data = response.data;
+      console.log(data['Pages']);
+      table().pagination(data['Pages'], data['Number']);
+
+      var buttons = document.getElementsByName('number');
+      Array.prototype.map.call(buttons, function(item){
+        item.addEventListener('click', nextPage);
+      })  
+
+      delete data['Items']; delete data['Pages']; delete data['Number'];
+      table().create(data);
     })
     .catch(function (error) {
       console.log(error.response);
     });
   }
 
-})(window)
+  function nextPage() {
+    orderByPriority(this.innerHTML);
+  }
+
+})(window.table)
 

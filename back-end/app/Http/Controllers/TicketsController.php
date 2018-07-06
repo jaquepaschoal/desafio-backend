@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\File;
 class TicketsController extends Controller
 {
 
-    public function __construct()
-    {
-        
+
+  // # Priorities
+    function priority( $number = null ) {
+      $read = json_decode(Storage::get('tickets.json'), true);
+      $data = $this->definePriorities( $read );
+      $data = $this->pagination( $data, $number);
+      return $data;
     }
 
-    function priority(Request $request) {
-      $read = json_decode(Storage::get('tickets.json'), true);
-      // $read =  json_decode($request->getContent(), true);
+    function definePriorities( $read ) {
       $data = array();
-
       foreach ($read as $value) {
         $ticketID = $value['TicketID'];
         $punctuation = $this->verifyTimeResolution( $value['DateCreate'], $value['DateUpdate'] );
@@ -31,7 +32,6 @@ class TicketsController extends Controller
         $value = array( 'Priority' => $this->isPriorityHigh( $punctuation ), 'Punctuation' => $punctuation ) + $value;
         array_push($data,$value);
       }
-
       return $data;
     }
 
@@ -76,6 +76,83 @@ class TicketsController extends Controller
       if ( $count >= 4 )
         return 'Prioridade Alta';
       return 'Prioridade Baixa';
+    }
+
+    // # Order By
+
+    function orderbyPriority( $number = null ) {
+      $read = json_decode(Storage::get('tickets.json'), true);
+      $data = $this->definePriorities( $read );
+
+      foreach ( $data as $item ) {
+        $priorities[] = $item['Priority'];
+      }
+
+      array_multisort( $priorities, $data );
+      $data = $this->pagination( $data, $number);
+      return $data;
+    }
+
+    function orderbyDate( $type = null, $number = null ) {
+      $read = json_decode(Storage::get('tickets.json'), true);
+      $data = $this->definePriorities( $read );
+
+      foreach ($data as $item) {
+        $date = explode(" ", $item[$type]);
+        $dates[] = $date[0];
+      }
+      array_multisort( $dates, $data );
+      $data = $this->pagination( $data, $number);
+      return $data;
+    }
+
+    // # Filter
+
+    function filterbyPriority( $type = null, $number ) {
+      $read = json_decode(Storage::get('tickets.json'), true);
+      $data = $this->definePriorities( $read );
+      
+      if( $type == 'pa' ) {
+        $filter = array_filter( $data, function( $item ) {
+          return $item['Priority'] === 'Prioridade Alta';
+        });
+      } else {
+        $filter = array_filter( $data, function( $item ) {
+          return $item['Priority'] === 'Prioridade Baixa';
+        });
+      }
+      $filter = $this->pagination( $filter, $number);
+      return $filter;
+    }
+
+    function filterbyDate( $initial = null, $final = null, $number = null ) {
+      $read = json_decode(Storage::get('tickets.json'), true);
+      $data = $this->definePriorities( $read );
+
+      $filter = array_filter( $data, function( $item ) use ($initial, $final) {
+        $dateInital = date('Y-m-d', strtotime($initial));
+        $dateFinal = date('Y-m-d', strtotime($final));
+        return ((explode(" ", $item['DateCreate'])[0]) > $dateInital) && 
+               ((explode(" ", $item['DateCreate'])[0]) < $dateFinal);
+      });
+
+      $filter = $this->pagination( $filter, $number);
+      return $filter;
+    }
+
+    // # Pagination
+    function pagination( $read, $number ) {
+      $page = $number;
+      $total = count( $read ); // # Total items in array    
+      $limit = 3; // # Per page    
+      $totalPages = ceil( $total/ $limit ); // # Calculate total pages
+      $page = max($page, 1); // # Get 1 page when page <= 0
+      $page = min($page, $totalPages); // # Get last page when page > $totalPages
+      $offset = ($page - 1) * $limit;
+      if( $offset < 0 ) $offset = 0;
+      $read = array_slice( $read, $offset, $limit );
+      $read = array('Number' => $page, 'Pages' => $totalPages, 'Items' => $total) + $read;
+      return $read;
     }
 }
 

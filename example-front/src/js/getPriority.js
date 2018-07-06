@@ -1,29 +1,42 @@
-(function(){
+(function(table){
 
   'use strict'
 
+
   var $priority = document.querySelector('[data-js="priority"]');
+  var page = 1;
   $priority.addEventListener('click', getPriorities);
 
- function getPriorities() {
+ function getPriorities( page ) {
+  
     axios({
       method: 'post',
-      url:'http://localhost:8000/tickets/priority',
+      url:'http://localhost:8000/tickets/priority/' + page,
       headers: { 
         'Content-Type': 'application/json',
       },
     })
     .then(function (response) {
-     showResponse(response.data);
+      var data = response.data;
+      console.log(data['Pages']);
+      table().pagination(data['Pages'], data['Number']);
+
+      var buttons = document.getElementsByName('number');
+      Array.prototype.map.call(buttons, function(item){
+        item.addEventListener('click', nextPage);
+      })  
+
+      delete data['Items']; delete data['Pages']; delete data['Number'];
+      table().create(data);
     })
     .catch(function (error) {
       console.log(error.response);
     });
   }
 
-  function showResponse(response) { 
-    console.log(response);
+  function nextPage() {
+    getPriorities(this.innerHTML);
   }
 
-})()
+})(window.table)
 

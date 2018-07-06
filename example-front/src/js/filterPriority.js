@@ -1,41 +1,40 @@
-(function(window){
+(function(table){
   'use strict'
 
   var $filterPriority = document.querySelector('[data-js="filter-priority');
-  $filterPriority.addEventListener('click', getPriorities);
+  var page = 1;
+  $filterPriority.addEventListener('click', filterPriority);
 
-  function getPriorities() {
-    axios({
-      method: 'post',
-      url:'http://localhost:8000/tickets/priority',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(function (response) {
-     filterPriority(response.data);
-    })
-    .catch(function (error) {
-      console.log(error.response);
-    });
-  }
-
-  function filterPriority(response) { 
+ 
+  function filterPriority( page ) { 
     axios({
       method: 'put',
-      url:'http://localhost:8000/filter/priority/pa',
+      url:'http://localhost:8000/tickets/filter/priority/pa/' + page,
       headers: { 
         'Content-Type': 'application/json',
       },
-      data: response
     })
     .then(function (response) {
-      console.log(response.data);
+      var data = response.data;
+      console.log(data['Pages']);
+      table().pagination(data['Pages'], data['Number']);
+
+      var buttons = document.getElementsByName('number');
+      Array.prototype.map.call(buttons, function(item){
+        item.addEventListener('click', nextPage);
+      })  
+
+      delete data['Items']; delete data['Pages']; delete data['Number'];
+      table().create(data);
     })
     .catch(function (error) {
       console.log(error.response);
     });
   }
 
-})(window)
+  function nextPage() {
+    filterPriority(this.innerHTML);
+  }
+
+})(window.table)
 
