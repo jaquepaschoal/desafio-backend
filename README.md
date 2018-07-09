@@ -35,6 +35,7 @@ $ php -S localhost:8000 -t public
 * /tickets/orderby/date/{type}/{number}: Orderna os tickets pela data de Criação ou pela data de Atualização.
 
 **{type}** -> Deve ser 'DateCreate' para data de criação ou 'DateUpdate' para data de atualização.
+
 **{number}** -> Número da página que deseja ser exibida.
 
 * /tickets/orderby/priority/{number}: Orderna os tickets de acordo com sua prioridade.
@@ -44,12 +45,15 @@ $ php -S localhost:8000 -t public
 * /tickets/filter/date/{initial}/{final}/{number}: Filtra os tickets de acordo com o intervalo da data de criação.
 
 **{initial}** -> Data inicial no formato (ANO-MES-DIA).
+
 **{final}** -> Data final no formato (ANO-MES-DIA).
+
 **{number}** -> Número da página que deseja ser exibida.
 
 * /tickets/filter/priority/{type}/{number}: Filtra os tickets de acordo com a prioridade escolhida.
 
 **{type}** -> 'pa' para prioridade alta, 'pb' para prioridade baixa.
+
 **{number}** -> Número da página que deseja ser exibida.
 
 ## Example
