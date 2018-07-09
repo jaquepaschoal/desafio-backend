@@ -18,13 +18,15 @@ class TicketsController extends Controller
       $read = json_decode(Storage::get('tickets.json'), true);
       $data = $this->definePriorities( $read );
       $data = $this->pagination( $data, $number);
-      return $data;
+      if($data)
+        return $data;
+      return new Response( ['fail' => 'Não foi possivel setar as prioridades.'] , 401);
     }
 
     function definePriorities( $read ) {
       $data = array();
       foreach ($read as $value) {
-        $ticketID = $value['TicketID'];
+        $ticketID    = $value['TicketID'];
         $punctuation = $this->verifyTimeResolution( $value['DateCreate'], $value['DateUpdate'] );
         foreach ($value['Interactions'] as $msg) {
           $punctuation = $punctuation + $this->verifyWords( $msg['Message'] ) + $this->verifySubject( $msg['Subject'] );
@@ -48,7 +50,7 @@ class TicketsController extends Controller
     }
 
     function verifyWords( $message ) {
-      $badWords = array('Não',
+      $badWords = array( 'Não',
                          'não', 
                          'nao foi entregue', 
                          'não foi entregue', 
@@ -60,7 +62,13 @@ class TicketsController extends Controller
                          'não chegou',
                          'nao chegou',
                          'não funciona',
-                         'nao funciona');
+                         'nao funciona',
+                         'prazo de entrega',
+                         'troco',
+                         'produto',
+                         'troca',
+                         'errado',
+                         'problema');
       $countWords = 0;
       foreach ($badWords as $words) {
         $countWords = $countWords + substr_count($message, $words);
@@ -73,7 +81,7 @@ class TicketsController extends Controller
     }
 
     function isPriorityHigh( $count ) {
-      if ( $count >= 4 )
+      if ( $count >= 3 )
         return 'Prioridade Alta';
       return 'Prioridade Baixa';
     }
@@ -126,6 +134,10 @@ class TicketsController extends Controller
     }
 
     function filterbyDate( $initial = null, $final = null, $number = null ) {
+
+      if(!$this->isValidDate($initial) || !$this->isValidDate($final))
+        return new Response( ['fail' => 'Data não está no formato correto! (ANO-MES-DIA).'] , 401);
+
       $read = json_decode(Storage::get('tickets.json'), true);
       $data = $this->definePriorities( $read );
 
@@ -140,18 +152,28 @@ class TicketsController extends Controller
       return $filter;
     }
 
+    function isValidDate($date) {
+      $date = explode("-",$date);
+      if( count($date) == 3) {
+        $d = $date[2]; $m = $date[1]; $y = $date[0];
+        $res = checkdate($m,$d,$y);
+        return ($res == 1 ? true : false); 
+      }
+      return false;
+    }
+
     // # Pagination
     function pagination( $read, $number ) {
-      $page = $number;
-      $total = count( $read ); // # Total items in array    
-      $limit = 3; // # Per page    
+      $page       = $number;
+      $total      = count( $read ); // # Total items in array    
+      $limit      = 3; // # Per page    
       $totalPages = ceil( $total/ $limit ); // # Calculate total pages
-      $page = max($page, 1); // # Get 1 page when page <= 0
-      $page = min($page, $totalPages); // # Get last page when page > $totalPages
-      $offset = ($page - 1) * $limit;
+      $page       = max($page, 1); // # Get 1 page when page <= 0
+      $page       = min($page, $totalPages); // # Get last page when page > $totalPages
+      $offset     = ($page - 1) * $limit;
       if( $offset < 0 ) $offset = 0;
-      $read = array_slice( $read, $offset, $limit );
-      $read = array('Number' => $page, 'Pages' => $totalPages, 'Items' => $total) + $read;
+      $read       = array_slice( $read, $offset, $limit );
+      $read       = array('Number' => $page, 'Pages' => $totalPages, 'Items' => $total) + $read;
       return $read;
     }
 }
