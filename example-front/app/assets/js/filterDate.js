@@ -23,7 +23,6 @@
       },
     })
     .then(function (response) {
-      console.log(response)
       var data = response.data;
       table().pagination(data['Pages'], data['Number']);
 

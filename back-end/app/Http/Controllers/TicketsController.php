@@ -26,7 +26,6 @@ class TicketsController extends Controller
     function definePriorities( $read ) {
       $data = array();
       foreach ($read as $value) {
-        $ticketID    = $value['TicketID'];
         $punctuation = $this->verifyTimeResolution( $value['DateCreate'], $value['DateUpdate'] );
         foreach ($value['Interactions'] as $msg) {
           $punctuation = $punctuation + $this->verifyWords( $msg['Message'] ) + $this->verifySubject( $msg['Subject'] );
@@ -137,13 +136,16 @@ class TicketsController extends Controller
 
       if(!$this->isValidDate($initial) || !$this->isValidDate($final))
         return new Response( ['fail' => 'Data não está no formato correto! (ANO-MES-DIA).'] , 401);
+      
+      if( strtotime($final) < strtotime($initial) )
+        return new Response( ['fail' => 'Data final não pode ser maior que a inicial. '] , 401);
 
       $read = json_decode(Storage::get('tickets.json'), true);
       $data = $this->definePriorities( $read );
 
       $filter = array_filter( $data, function( $item ) use ($initial, $final) {
         $dateInital = date('Y-m-d', strtotime($initial));
-        $dateFinal = date('Y-m-d', strtotime($final));
+        $dateFinal  = date('Y-m-d', strtotime($final));
         return ((explode(" ", $item['DateCreate'])[0]) > $dateInital) && 
                ((explode(" ", $item['DateCreate'])[0]) < $dateFinal);
       });

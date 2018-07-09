@@ -1,37 +1,70 @@
-# Desafio desenvolvedor backend
+# Desafio back-end - NeoAssist
 
-Precisamos melhorar o atendimento no Brasil, para alcançar esse resultado, precisamos de um algoritmo que classifique
-nossos tickets (disponível em tickets.json) por uma ordem de prioridade, um bom parâmetro para essa ordenação é identificar o humor do consumidor.
-Pensando nisso, queremos classificar nossos tickets com as seguintes prioridade: Normal e Alta.
+Desafio para a empresa NeoAssist .
 
-### São exemplos:
+## Começando
 
-### Prioridade Alta:
-- Consumidor insatisfeito com produto ou serviço
-- Prazo de resolução do ticket alta
-- Consumidor sugere abrir reclamação como exemplo Procon ou ReclameAqui
-    
-### Prioridade Normal
-- Primeira iteração do consumidor
-- Consumidor não demostra irritação
+* Para ter o projeto funcionando em sua máquina, clone este repositório,  acesse a pasta [back-end](https://github.com/jaquepaschoal/desafio-backend/tree/master/back-end) e rode o comando:
 
-Considere uma classificação com uma assertividade de no mínimo 70%, e guarde no documento (Nosso json) a prioridade e sua pontuação.
+```
+$ composer install
+```
 
-### Com base nisso, você precisará desenvolver:
-- Um algoritmo que classifique nossos tickets
-- Uma API que exponha nossos tickets com os seguintes recursos
-  - Ordenação por: Data Criação, Data Atualização e Prioridade
-  - Filtro por: Data Criação (intervalo) e Prioridade
-  - Paginação
-        
-### Escolha as melhores ferramentas para desenvolver o desafio, as únicas regras são:
-- Você deverá fornecer informações para que possamos executar e avaliar o resultado;
-- Poderá ser utilizado serviços pagos (Mas gostamos bastante de projetos open source)
-    
-### Critérios de avaliação
-- Organização de código;
-- Lógica para resolver o problema (Criatividade);
-- Performance
-    
-### Como entregar seu desafio
-- Faça um Fork desse projeto, desenvolva seu conteúdo e informe no formulário (https://goo.gl/forms/5wXTDLI6JwzzvOEg2) o link do seu repositório
+* Para que funcione corretamente, o arquivo tickets.json deve estar em  [Storage](https://github.com/jaquepaschoal/desafio-backend/tree/master/back-end/storage).
+* Para rodar o projeto, o seguindo comando foi utilizado:
+```
+$ php -S localhost:8000 -t public
+```
+
+### Pré - requisitos
+
+* PHP >= 7.1.3
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+* Ctype PHP Extension
+* JSON PHP Extension
+
+## Rotas
+* /tickets/priority/{number} : Usada para determinar as prioridades de cada ticket.
+**{number}** -> Número da página que deseja ser exibida.
+
+* /tickets/orderby/date/{type}/{number}: Orderna os tickets pela data de Criação ou pela data de Atualização.
+**{type}** -> Deve ser 'DateCreate' para data de criação ou 'DateUpdate' para data de atualização.
+**{number}** -> Número da página que deseja ser exibida.
+
+* /tickets/orderby/priority/{number}: Orderna os tickets de acordo com sua prioridade.
+**{number}** -> Número da página que deseja ser exibida.
+
+* /tickets/filter/date/{initial}/{final}/{number}: Filtra os tickets de acordo com o intervalo da data de criação.
+**{initial}** -> Data inicial no formato (ANO-MES-DIA).
+**{final}** -> Data final no formato (ANO-MES-DIA).
+**{number}** -> Número da página que deseja ser exibida.
+
+* /tickets/filter/priority/{type}/{number}: Filtra os tickets de acordo com a prioridade escolhida.
+**{type}** -> 'pa' para prioridade alta, 'pb' para prioridade baixa.
+**{number}** -> Número da página que deseja ser exibida.
+
+## Example
+
+Um exemplo com as requisições para cada rota pode ser acessado  [aqui](https://github.com/jaquepaschoal/desafio-backend/tree/master/example-front).
+Para tê-lo funcionando, rode: 
+```
+$ npm i 
+```
+```
+$ npm start
+```
+
+
+## Feito com
+
+* [Lumen](https://lumen.laravel.com/docs/5.6) - Um microframework derivado do Laravel.
+
+## Autor
+
+* **Jaqueline Paschoal** - [*Web Developer*](https://github.com/jaquepaschoal)
+
+
