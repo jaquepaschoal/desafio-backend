@@ -15,7 +15,6 @@
     })
     .then(function (response) {
       var data = response.data;
-      console.log(data['Pages']);
       table().pagination(data['Pages'], data['Number']);
 
       var buttons = document.getElementsByName('number');
