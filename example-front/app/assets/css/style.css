@@ -397,8 +397,14 @@ h3 {
     opacity: 0.7; }
 
 .pagination {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
   margin-left: 5rem;
   margin-top: 3rem; }
+  .pagination h3 {
+    margin-right: 1rem; }
 
 .table-content {
   display: -ms-flexbox;

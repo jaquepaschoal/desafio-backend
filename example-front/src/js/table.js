@@ -38,7 +38,7 @@
         var result = document.querySelector("[data-js='result']");
         result.innerHTML= " ";
       },
-      pagination: function pagination( pages, number ) {
+      pagination: function pagination( pages ) {
         var numbers = document.querySelector('[data-js="numbers"]');
         numbers.innerHTML = '';
         

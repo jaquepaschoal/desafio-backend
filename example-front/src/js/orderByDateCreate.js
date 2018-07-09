@@ -15,7 +15,7 @@
     })
     .then(function (response) {
       var data = response.data;
-      table().pagination(data['Pages'], data['Number']);
+      table().pagination( data['Pages'] );
 
       var buttons = document.getElementsByName('number');
       Array.prototype.map.call(buttons, function(item){
