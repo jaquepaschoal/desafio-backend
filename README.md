@@ -10,11 +10,7 @@ Desafio para a empresa NeoAssist .
 $ composer install
 ```
 
-<<<<<<< HEAD
-* Para que funcione corretamente, o arquivo tickets.json deve estar em  [Storage](https://github.com/jaquepaschoal/desafio-backend/tree/master/back-end/storage).
-=======
 * Para que funcione corretamente, o arquivo tickets.json deve estar em  [Storage/app](https://github.com/jaquepaschoal/desafio-backend/tree/master/back-end/storage/app).
->>>>>>> 8725c196781cd57eb0264dc325a1da57a5973e4d
 * Para rodar o projeto, o seguinte comando foi utilizado:
 ```
 $ php -S localhost:8000 -t public
